@@ -1,19 +1,25 @@
-import { List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
+import { Button, List, ListItem, ListItemText } from "@mui/material";
+import { doc, deleteDoc } from "firebase/firestore"; // Import deleteDoc and doc from firestore
 import React from "react";
+import db from "./firebase";
 
 function Todo(props) {
+  const handleDelete = async (id) => {
+    // Create a document reference using the todo id
+    const todoRef = doc(db, 'todos', id);
+    await deleteDoc(todoRef); // Delete the document
+  };
+
   return (
     <div>
-      <ul>
+      <List className="todo_list">
         {props.list.map((todo) => (
-          <List className="todo_list">
-            <ListItem>
-              <ListItemAvatar></ListItemAvatar>
-              <ListItemText primary={todo} secondary="Dummy Deadline ⏱️"/>
-            </ListItem>
-          </List>
+          <ListItem key={todo.id}>
+            <ListItemText primary={todo.todo} secondary="Deadline ⏱️"/>
+            <Button onClick={() => handleDelete(todo.id)}>DELETE 🗑️</Button>
+          </ListItem>
         ))}
-      </ul>
+      </List>
     </div>
   );
 }

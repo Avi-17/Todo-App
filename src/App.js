@@ -15,7 +15,7 @@ function App() {
   useEffect(() => {
     const todosCollection = query(collection(db, 'todos'), orderBy('timestamp', 'asc')); // Correct usage of orderBy
     const unsubscribe = onSnapshot(todosCollection, (snapshot) => {
-      setTodos(snapshot.docs.map(doc => doc.data().todo)); // Include the document ID
+      setTodos(snapshot.docs.map(doc => ({id: doc.id, todo: doc.data().todo}))); // Include the document ID
     });
     return () => unsubscribe();
   }, []);
